@@ -1,0 +1,269 @@
+SQL> spool D:\DBLab_220968422\Lab_examples\lab1.txt
+SQL> ;
+  1* SELECT * FROM student
+SQL> desc student;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 VARCHAR2(5)
+ NAME                                               VARCHAR2(20)
+ DEPT_NAME                                          VARCHAR2(20)
+ TOT_CRED                                           NUMBER(3)
+
+SQL> spool off;
+SQL> spool D:\DBLab_220968422\Lab_examples\lab1.txt APPEND;
+SQL> SELECT * FROM student;
+
+ID    NAME                 DEPT_NAME              TOT_CRED
+----- -------------------- -------------------- ----------
+1001  Rajesh               DSE                          30
+1002  Ravi                                              30
+1003  Ajith                Info Sc                      36
+1003  Ajith                Info Sc                      36
+1004  Akanksha             Data Sc                      36
+1004  Akanksha             Data Sc                      36
+1003  Ajith                Info Sc                      36
+1004  Akanksha             Data Sc                      36
+1003  Ajith                Info Sc                      36
+1004  Akanksha             Data Sc                      36
+
+10 rows selected.
+
+SQL> spool off;
+SQL> CREATE TABLE DSE_STUD
+  2  (Regno varchar(20),
+  3  Name varchar(20),
+  4  Course_ID numeric(5,0),
+  5  Phone char(10),
+  6  email char(10));
+
+Table created.
+
+SQL>
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+INTO student VALUES ('220968422','MEDHA N BHAT','DSE',NULL,NULL)
+     *
+ERROR at line 2:
+ORA-00913: too many values
+
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+INTO student VALUES ('220968422','MEDHA BHAT','DSE',NULL,NULL)
+     *
+ERROR at line 2:
+ORA-00913: too many values
+
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+INTO student VALUES ('220968422','MEDHA BHAT','DSE',NULL,NULL)
+     *
+ERROR at line 2:
+ORA-00913: too many values
+
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+INTO student VALUES ('220968422','ME','DSE',NULL,NULL)
+     *
+ERROR at line 2:
+ORA-00913: too many values
+
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+INTO student VALUES ('2209','ME','DSE',NULL,NULL)
+     *
+ERROR at line 2:
+ORA-00913: too many values
+
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+INTO student VALUES ('2209','ME',1,NULL,NULL)
+     *
+ERROR at line 2:
+ORA-00913: too many values
+
+
+SQL> DESC DSE_STUD;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGNO                                              VARCHAR2(20)
+ NAME                                               VARCHAR2(20)
+ COURSE_ID                                          NUMBER(5)
+ PHONE                                              CHAR(10)
+ EMAIL                                              CHAR(10)
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+INTO DSE_STUD VALUES ('220968400','SHREENIDDHI NAYAK','DSE',NULL,NULL)
+                                                      *
+ERROR at line 3:
+ORA-01722: invalid number
+
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+
+5 rows created.
+
+SQL> SELECT * FROM DSE_STUD;
+
+REGNO                NAME                  COURSE_ID PHONE      EMAIL
+-------------------- -------------------- ---------- ---------- ----------
+2209                 ME                            1
+220968400            SHREENIDDHI NAYAK             1
+220968410            AARON DSOUZA                  1
+220968405            PUSHKAL OJHA                  1
+220968417            ANIKA OJHA                    1
+
+SQL> CREATE TABLE DEPT(
+  2  Dno varchar(3) Primary Kry,
+  3  Dno varchar(3) Primary Kr;,
+  4  ;
+Dno varchar(3) Primary Kry,
+                       *
+ERROR at line 2:
+ORA-00905: missing keyword
+
+
+SQL> CREATE TABLE DEPT(
+  2  Dno varchar(3) Primary Key,
+  3  Dname varchar (15),
+  4  Zone varchar(10));
+
+Table created.
+
+SQL> CREATE TABLE EMP(
+  2  EMPLOYEE varchar(5) Primary Key,
+  3  NAME varchar(20),
+  4  DEPTNO varchar(3) references Dno,
+  5  SALARY varchar(9
+  6  ;
+
+*
+ERROR at line 6:
+ORA-00907: missing right parenthesis
+
+
+SQL> CREATE TABLE EMP(
+  2  EMPLOYEE varchar(5) Primary Key,
+  3  NAME varchar(20),
+  4  DEPTNO varchar(3) references Dno,
+  5  SALARY varchar(9));
+DEPTNO varchar(3) references Dno,
+                             *
+ERROR at line 4:
+ORA-00942: table or view does not exist
+
+
+SQL> CREATE TABLE EMP(
+  2  EMPLOYEE varchar(5) Primary Key,
+  3  NAME varchar(20),
+  4  DEPTNO varchar(3) references DEPT,
+  5  SALARY varchar(9));
+
+Table created.
+
+SQL> DESC EMP;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPLOYEE                                  NOT NULL VARCHAR2(5)
+ NAME                                               VARCHAR2(20)
+ DEPTNO                                             VARCHAR2(3)
+ SALARY                                             VARCHAR2(9)
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+
+3 rows created.
+
+SQL> @D:\DBLab_220968422\Lab_examples\stud_ins.sql
+
+3 rows created.
+
+SQL> SELECT * FROM EMP;
+
+EMPLO NAME                 DEP SALARY
+----- -------------------- --- ---------
+100   PUSHKAL              D1  1000000
+101   ANIKA                D2  1000000
+102   BATMAN               D3  1000000
+
+SQL> SELECT * FROM DEPT;
+
+DNO DNAME           ZONE
+--- --------------- ----------
+D1  OPERATIONS      NORTH
+D2  SALES           WEST
+D3  INCOMING        SOUTH
+
+SQL> SELECT E.NAME , E.DEPT,D.DNAME FROM EMP AS E
+  2  WHERE EMP.DEPTNO=DEPT.DNO;
+SELECT E.NAME , E.DEPT,D.DNAME FROM EMP AS E
+                                        *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> CREATE TABLE MARKS(regno number(30,MARKS1 number(3) check(MARKS1>=0 AND MARK1<=100),MARK2 number(3)
+  2  check(MARK2>0=0 AND MARK2<=100),Total number(3),
+  3  Grade char(2) check(GRADE IN ('A+','A','B','C','D','E','F'));
+CREATE TABLE MARKS(regno number(30,MARKS1 number(3) check(MARKS1>=0 AND MARK1<=100),MARK2 number(3)
+                                   *
+ERROR at line 1:
+ORA-01728: numeric scale specifier is out of range (-84 to 127)
+
+
+SQL> CREATE TABLE MARKS(regno number(3),MARKS1 number(3) check(MARKS1>=0 AND MARK1<=100),MARK2 number(3)
+  2  check(MARK2>0=0 AND MARK2<=100),Total number(3),
+  3  Grade char(2) check(GRADE IN ('A+','A','B','C','D','E','F'));
+CREATE TABLE MARKS(regno number(3),MARKS1 number(3) check(MARKS1>=0 AND MARK1<=100),MARK2 number(3)
+                                                                                   *
+ERROR at line 1:
+ORA-02438: Column check constraint cannot reference other columns
+
+
+SQL> CREATE TABLE MARKS(regno number(3),MARKS1 number(3) check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+  2  check(MARK2>0=0 AND MARK2<=100),Total number(3),
+  3  Grade char(2) check(GRADE IN ('A+','A','B','C','D','E','F')));
+check(MARK2>0=0 AND MARK2<=100),Total number(3),
+             *
+ERROR at line 2:
+ORA-00907: missing right parenthesis
+
+
+SQL> CREATE TABLE MARKS(regno number(3),MARKS1 number(3) check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+  2  check(MARK2>=0 AND MARK2<=100),Total number(3),
+  3  Grade char(2) check(GRADE IN ('A+','A','B','C','D','E','F')));
+
+Table created.
+
+SQL> CREATE TABLE MARKS(regno number(3),MARKS1 number(3) cm1 check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+  2  cm2 check(MARK2>=0 AND MARK2<=100),Total number(3),
+  3  Grade char(2) check(GRADE IN ('A+','A','B','C','D','E','F')));
+CREATE TABLE MARKS(regno number(3),MARKS1 number(3) cm1 check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+                                                    *
+ERROR at line 1:
+ORA-00907: missing right parenthesis
+
+
+SQL> CREATE TABLE MARKS(regno number(3),MARKS1 number(3) CONTRAINT cm1 check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+  2  CONSTRAINT cm2 check(MARK2>=0 AND MARK2<=100),Total number(3),
+  3  Grade char(2) check(GRADE IN ('A+','A','B','C','D','E','F')));
+CREATE TABLE MARKS(regno number(3),MARKS1 number(3) CONTRAINT cm1 check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+                                                    *
+ERROR at line 1:
+ORA-00907: missing right parenthesis
+
+
+SQL> CREATE TABLE MARKS(regno number(3),MARKS1 number(3) CONSTRAINT cm1 check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+  2  CONSTRAINT cm2 check(MARK2>=0 AND MARK2<=100),Total number(3),
+  3  Grade char(2) check(GRADE IN ('A+','A','B','C','D','E','F')));
+CREATE TABLE MARKS(regno number(3),MARKS1 number(3) CONSTRAINT cm1 check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> CREATE TABLE MARKS2(regno number(3),MARKS1 number(3) CONSTRAINT cm1 check(MARKS1>=0 AND MARKS1<=100),MARK2 number(3)
+  2  CONSTRAINT cm2 check(MARK2>=0 AND MARK2<=100),Total number(3),
+  3  Grade char(2) check(GRADE IN ('A+','A','B','C','D','E','F')));
+
+Table created.
+
+SQL>

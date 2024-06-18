@@ -1,0 +1,753 @@
+SQL> SELECT NAME FROM EMP
+  2  WHERE EMPCODE = 106
+  3  ;
+
+NAME                                                                            
+----------                                                                      
+RAJ                                                                             
+
+SQL> SELECT * FROM EMP
+  2  WHERE REPORTS_TO = 106;
+
+   EMPCODE NAME       QUALIFI      PHONE EMAIL                                  
+---------- ---------- ------- ---------- --------------------                   
+DESIGNATION              SALARY REPORTS_TO                                      
+-------------------- ---------- ----------                                      
+       110 BHASKAR    MTECH   8962446445 bhaskar@digisol.com                    
+PROJECT DIRECTOR         101000        106                                      
+                                                                                
+       105 MANISH     MCA     8962446447 manish@digisol.com                     
+DEVELOPER                101000        106                                      
+                                                                                
+
+SQL> SELECT * FROM EMP
+  2  WHERE DESIGNATION = 'TECHNICAL HEAD' AND QUALIFICATION = 'BTECH';
+
+   EMPCODE NAME       QUALIFI      PHONE EMAIL                                  
+---------- ---------- ------- ---------- --------------------                   
+DESIGNATION              SALARY REPORTS_TO                                      
+-------------------- ---------- ----------                                      
+       108 AJAY       BTECH   8962446444 ajay@digisol.com                       
+TECHNICAL HEAD           101000        102                                      
+                                                                                
+
+SQL> SELECT NAME FROM EMP
+  2  WHERE SALARY BETWEEN 100000 AND 200000;
+
+NAME                                                                            
+----------                                                                      
+RAVI                                                                            
+VIJAY                                                                           
+AJAY                                                                            
+BHASKAR                                                                         
+RAJ                                                                             
+MANISH                                                                          
+PRSAD                                                                           
+RAKESH                                                                          
+RAKESH                                                                          
+PUSHKAL                                                                         
+ANIKA                                                                           
+
+NAME                                                                            
+----------                                                                      
+RAJ                                                                             
+
+12 rows selected.
+
+SQL> SELECT NAME FROM EMP
+  2  WHERE SALARY > 100000 AND SALARY < 200000;
+
+NAME                                                                            
+----------                                                                      
+RAVI                                                                            
+VIJAY                                                                           
+AJAY                                                                            
+BHASKAR                                                                         
+RAJ                                                                             
+MANISH                                                                          
+PRSAD                                                                           
+RAKESH                                                                          
+RAKESH                                                                          
+PUSHKAL                                                                         
+ANIKA                                                                           
+
+NAME                                                                            
+----------                                                                      
+RAJ                                                                             
+
+12 rows selected.
+
+SQL> SELECT SKILLID FROM SKILL
+  2  ..;
+..
+ *
+ERROR at line 2:
+ORA-00903: invalid table name 
+
+
+SQL> SELECT SKILLID FROM SKILL S
+  2  WHERE SKILL ID = (
+  3  SELECT SKILLID FROM EMP_SKILL
+  4  WHERE EMPNO = 101);
+WHERE SKILL ID = (
+            *
+ERROR at line 2:
+ORA-00920: invalid relational operator 
+
+
+SQL> SELECT SKILLID FROM SKILL S
+  2  ..;
+..
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT SKILLNAME FROM SKILL
+  2  WHERE SKILLID = (
+  3  SELECT SKILLID FROM EMP_SKILL
+  4  WHERE EMPNO = 101);
+SELECT SKILLID FROM EMP_SKILL
+*
+ERROR at line 3:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> SELECT SKILLID FROM EMP_SKILL WHERE EMPNO = 101;
+
+SKI                                                                             
+---                                                                             
+S1                                                                              
+S2                                                                              
+S3                                                                              
+
+SQL> SELECT SKILLNAME FROM SKILL
+  2  WHERE SKILLID = (
+  3  ;;;.
+  4  ;
+;;;.
+*
+ERROR at line 3:
+ORA-00936: missing expression 
+
+
+SQL> SELECT SKILLNAME FROM SKILL
+  2  WHERE SKILLID IN (
+  3  SELECT SKILLID FROM EMP_SKILL WHERE EMPNO = 101);
+
+SKILLNAME                                                                       
+--------------------                                                            
+Full stack                                                                      
+Python                                                                          
+Java                                                                            
+
+SQL> SELECT EMPCODE FROM WORK_EXP
+  2  WHERE CLIENTID IN ('C1','C2') AND RATING IN ('A','B');
+
+   EMPCODE                                                                      
+----------                                                                      
+       102                                                                      
+       105                                                                      
+
+SQL> SELECT NAME FROM EMP E
+  2  WHERE EMPCODE IN (
+  3  SELECT EMPCODE FROM WORK_EXP
+  4  WHERE CLIENTID = 'C2' AND RATING = 'B');
+
+NAME                                                                            
+----------                                                                      
+VIJAY                                                                           
+MANISH                                                                          
+
+SQL> SELECT E.NAME, F.DEP_NAME FROM EMP E
+  2  FAMILY_DEPENDENTS F WHERE E.EMPCODE = F.EMPNO;
+FAMILY_DEPENDENTS F WHERE E.EMPCODE = F.EMPNO
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT E.NAME, F.DEP_NAME FROM EMP E ,
+  2  FAMILY_DEPENDENTS F WHERE E.EMPCODE = F.EMPNO;
+
+NAME       DEP_NAME                                                             
+---------- --------------------                                                 
+RAVI       AARYA                                                                
+RAVI       AKANKSH                                                              
+RAVI       ANITHA                                                               
+VIJAY      ANIL                                                                 
+
+SQL> SELECT E.NAME, F.DEP_NAME FROM EMP E,
+  2  ..;
+..
+*
+ERROR at line 2:
+ORA-00903: invalid table name 
+
+
+SQL> SELECT E.NAME, F.DEP_NAME FROM EMP E
+  2  LEFT JOIN FAMILY_DEPENDENTS F ON E.EMPCODE = F.EMPNO;
+
+NAME       DEP_NAME                                                             
+---------- --------------------                                                 
+RAVI       AARYA                                                                
+RAVI       AKANKSH                                                              
+RAVI       ANITHA                                                               
+VIJAY      ANIL                                                                 
+RAKESH                                                                          
+MANISH                                                                          
+RAJ                                                                             
+PRSAD                                                                           
+AJAY                                                                            
+PUSHKAL                                                                         
+BHASKAR                                                                         
+
+NAME       DEP_NAME                                                             
+---------- --------------------                                                 
+RAJ                                                                             
+ANIKA                                                                           
+RAKESH                                                                          
+ANIKA                                                                           
+
+15 rows selected.
+
+SQL> SELECT PRJID FROM PRJ_DETAILS
+  2  WHERE ACTUAL_END_DATE = END_DATE AND ACTUAL_BUDGET = BUDGET_ALLOCATED;
+
+no rows selected
+
+SQL> SELECT E.NAME , P.PRJ_DETAILS FROM EMP E,
+  2  PRJ_DETAILS P WHERE E.EMPCODE = P.LEAD_BY_EMPCODE
+  3  AND P.LEAD_BY_EMPCODE IN (SELECT PRJID FROM PRJ_DETAILS
+  4  WHERE ACTUAL_END_DATE = END_DATE AND ACTUAL_BUDGET = BUDGET_ALLOCATED);
+SELECT E.NAME , P.PRJ_DETAILS FROM EMP E,
+                *
+ERROR at line 1:
+ORA-00904: "P"."PRJ_DETAILS": invalid identifier 
+
+
+SQL> SELECT E.NAME , P.PRJID FROM EMP E,
+  2  PRJ_DETAILS P WHERE E.EMPCODE = P.LEAD_BY_EMPCODE
+  3  AND P.PRJID IN (SELECT PRJID FROM PRJ_DETAILS
+  4  WHERE ACTUAL_END_DATE = END_DATE AND ACTUAL_BUDGET = BUDGET_ALLOCATED);
+
+no rows selected
+
+SQL> SELECT E.NAME, E.SALARY, P.PAY_DATE, P.REGULAR_INCREMENT, P.ADVANCE_TAX
+  2  FROM EMP E, PAY_CHECK P WHERE P.EMPCODE = E.EMPCODE AND P.PAYDATE LIKE (%-03-%);
+FROM EMP E, PAY_CHECK P WHERE P.EMPCODE = E.EMPCODE AND P.PAYDATE LIKE (%-03-%)
+                                                                        *
+ERROR at line 2:
+ORA-00911: invalid character 
+
+
+SQL> SELECT E.NAME, E.SALARY, P.PAY_DATE, P.REGULAR_INCREMENT, P.ADVANCE_TAX
+  2  FROM EMP E, PAY_CHECK P WHERE P.EMPCODE = E.EMPCODE AND P.PAYDATE LIKE ('%-03-%');
+FROM EMP E, PAY_CHECK P WHERE P.EMPCODE = E.EMPCODE AND P.PAYDATE LIKE ('%-03-%')
+                                                        *
+ERROR at line 2:
+ORA-00904: "P"."PAYDATE": invalid identifier 
+
+
+SQL> SELECT E.NAME, E.SALARY, P.PAY_DATE, P.REGULAR_INCREMENT, P.ADVANCE_TAX
+  2  FROM EMP E, PAY_CHECK P WHERE P.EMPCODE = E.EMPCODE AND P.PAY_DATE LIKE ('%-03-%');
+
+no rows selected
+
+SQL> SELECT E1.NAME, E2.NAME, E2.PHONE FROM EMP E1, EMP E2
+  2  WHERE E1.EMPCODE = E2.EMPCODE AND E2.EMPCODE = E1.REPORTS_TO;
+
+no rows selected
+
+SQL> SELECT E1.NAME, E2.NAME, E2.PHONE FROM EMP E1, EMP E2
+  2  WHERE E1.EMPCODE = E2.EMPCODE AND E2.EMPCODE IN (SELECT REPORTS_TO FROM EMP);
+
+NAME       NAME            PHONE                                                
+---------- ---------- ----------                                                
+RAVI       RAVI       8962446442                                                
+VIJAY      VIJAY      8962446443                                                
+RAJ        RAJ        8962446446                                                
+PRSAD      PRSAD      8962446448                                                
+BHASKAR    BHASKAR    8962446445                                                
+
+SQL> SELECT E1.NAME, E2.NAME, E2.PHONE FROM EMP E1 LEFT JOIN
+  2  ;;;;/.';'
+  3  ;
+;;;;/.';'
+*
+ERROR at line 2:
+ORA-00903: invalid table name 
+
+
+SQL> SELECT E1.NAME , E1.REPORTS_TO FROM EMP E1;
+
+NAME       REPORTS_TO                                                           
+---------- ----------                                                           
+ANIKA             107                                                           
+RAVI              102                                                           
+VIJAY             110                                                           
+AJAY              102                                                           
+BHASKAR           106                                                           
+RAJ               110                                                           
+MANISH            106                                                           
+PRSAD                                                                           
+RAKESH            101                                                           
+RAKESH            101                                                           
+PUSHKAL           101                                                           
+
+NAME       REPORTS_TO                                                           
+---------- ----------                                                           
+ANIKA             101                                                           
+RAJ               101                                                           
+
+13 rows selected.
+
+SQL> SELECT E1.NAME , E1.NAME FROM EMP E1;
+
+NAME       NAME                                                                 
+---------- ----------                                                           
+ANIKA      ANIKA                                                                
+RAVI       RAVI                                                                 
+VIJAY      VIJAY                                                                
+AJAY       AJAY                                                                 
+BHASKAR    BHASKAR                                                              
+RAJ        RAJ                                                                  
+MANISH     MANISH                                                               
+PRSAD      PRSAD                                                                
+RAKESH     RAKESH                                                               
+RAKESH     RAKESH                                                               
+PUSHKAL    PUSHKAL                                                              
+
+NAME       NAME                                                                 
+---------- ----------                                                           
+ANIKA      ANIKA                                                                
+RAJ        RAJ                                                                  
+
+13 rows selected.
+
+SQL> SELECT E1.NAME , E1.NAME FROM EMP E1 WHERE E1.NAME IN (SELECT NAME FROM EMP WHERE EMPCODE = REPORTS_TO)
+  2  ;
+
+no rows selected
+
+SQL> SELECT NAME FROM EMP WHERE EMPCODE = REPORTS_TO
+  2  ;
+
+no rows selected
+
+SQL> SELECT E1.NAME FROM EMP E1 , EMP E2 WHERE E1.EMPCODE = E2.REPORTS_TO;
+
+NAME                                                                            
+----------                                                                      
+RAVI                                                                            
+RAVI                                                                            
+RAVI                                                                            
+RAVI                                                                            
+RAVI                                                                            
+VIJAY                                                                           
+VIJAY                                                                           
+RAJ                                                                             
+RAJ                                                                             
+PRSAD                                                                           
+BHASKAR                                                                         
+
+NAME                                                                            
+----------                                                                      
+BHASKAR                                                                         
+
+12 rows selected.
+
+SQL> SELECT E2.NAME FROM EMP E1 , EMP E2 WHERE E1.EMPCODE = E2.REPORTS_TO;
+
+NAME                                                                            
+----------                                                                      
+ANIKA                                                                           
+RAVI                                                                            
+VIJAY                                                                           
+AJAY                                                                            
+BHASKAR                                                                         
+RAJ                                                                             
+MANISH                                                                          
+RAKESH                                                                          
+RAKESH                                                                          
+PUSHKAL                                                                         
+ANIKA                                                                           
+
+NAME                                                                            
+----------                                                                      
+RAJ                                                                             
+
+12 rows selected.
+
+SQL> SELECT E2.NAME,E1.NAME FROM EMP E1 , EMP E2 WHERE E1.EMPCODE = E2.REPORTS_TO;
+
+NAME       NAME                                                                 
+---------- ----------                                                           
+RAKESH     RAVI                                                                 
+RAKESH     RAVI                                                                 
+PUSHKAL    RAVI                                                                 
+RAJ        RAVI                                                                 
+ANIKA      RAVI                                                                 
+RAVI       VIJAY                                                                
+AJAY       VIJAY                                                                
+MANISH     RAJ                                                                  
+BHASKAR    RAJ                                                                  
+ANIKA      PRSAD                                                                
+VIJAY      BHASKAR                                                              
+
+NAME       NAME                                                                 
+---------- ----------                                                           
+RAJ        BHASKAR                                                              
+
+12 rows selected.
+
+SQL> SELECT E2.NAME,E1.NAME,E1.PHONE FROM EMP E1 , EMP E2 WHERE E1.EMPCODE = E2.REPORTS_TO;
+
+NAME       NAME            PHONE                                                
+---------- ---------- ----------                                                
+RAKESH     RAVI       8962446442                                                
+RAKESH     RAVI       8962446442                                                
+PUSHKAL    RAVI       8962446442                                                
+RAJ        RAVI       8962446442                                                
+ANIKA      RAVI       8962446442                                                
+RAVI       VIJAY      8962446443                                                
+AJAY       VIJAY      8962446443                                                
+MANISH     RAJ        8962446446                                                
+BHASKAR    RAJ        8962446446                                                
+ANIKA      PRSAD      8962446448                                                
+VIJAY      BHASKAR    8962446445                                                
+
+NAME       NAME            PHONE                                                
+---------- ---------- ----------                                                
+RAJ        BHASKAR    8962446445                                                
+
+12 rows selected.
+
+SQL> SELECT F.DEP_NAME FROM FAMILY_DEPENDENTS F, EMP E
+  2  WHERE E.EMPCODE = F.EMPNO AND E.NAME = 'RAVI';
+
+DEP_NAME                                                                        
+--------------------                                                            
+AARYA                                                                           
+AKANKSH                                                                         
+ANITHA                                                                          
+
+SQL> SELECT NAME,DESIGNATION, (SALARY*12) AS ANNUAL_SALARY FROM EMP;
+
+NAME       DESIGNATION          ANNUAL_SALARY                                   
+---------- -------------------- -------------                                   
+ANIKA      CEO                        2424000                                   
+RAVI       PROJECT LEADER             1212000                                   
+VIJAY      PROJECT MANAGER            1212000                                   
+AJAY       TECHNICAL HEAD             1212000                                   
+BHASKAR    PROJECT DIRECTOR           1212000                                   
+RAJ        PROJECT LEADER             1212000                                   
+MANISH     DEVELOPER                  1212000                                   
+PRSAD      CEO                        1212000                                   
+RAKESH     PROJECT LEADER             1212000                                   
+RAKESH     DEVELOPER                  1212000                                   
+PUSHKAL    PROJECT LEADER             1212000                                   
+
+NAME       DESIGNATION          ANNUAL_SALARY                                   
+---------- -------------------- -------------                                   
+ANIKA      DEVELOPER                  1212000                                   
+RAJ        PROJECT LEADER             1212000                                   
+
+13 rows selected.
+
+SQL> SELECT * FROM PRJ_DETAILS ORDER BY ACTUAL_END_DATE DESC
+  2  ;
+
+PRJ PRJ_NAME   START_DAT END_DATE  ACTUAL_EN LEAD_BY_EMPCODE BUDGET_ALLOCATED   
+--- ---------- --------- --------- --------- --------------- ----------------   
+ACTUAL_BUDGET                                                                   
+-------------                                                                   
+P3  UNICORN    03-SEP-21 10-OCT-23 10-DEC-23             106          7500000   
+      8000000                                                                   
+                                                                                
+P1  SPYDER     10-JAN-20 11-OCT-22 11-DEC-22             102          2000000   
+      1990000                                                                   
+                                                                                
+P10 SPYDER2    10-JAN-20 11-OCT-22 11-DEC-22             102          2000000   
+      1990000                                                                   
+                                                                                
+
+PRJ PRJ_NAME   START_DAT END_DATE  ACTUAL_EN LEAD_BY_EMPCODE BUDGET_ALLOCATED   
+--- ---------- --------- --------- --------- --------------- ----------------   
+ACTUAL_BUDGET                                                                   
+-------------                                                                   
+P6  MARS       21-FEB-22 07-AUG-22 09-AUG-22             110          2000000   
+      1990000                                                                   
+                                                                                
+P9  XXX        21-FEB-22 07-JUN-22 09-AUG-22             110          2000000   
+      1990000                                                                   
+                                                                                
+P7  PUSH       21-FEB-22 07-JUN-22 09-AUG-22             120          2000000   
+      1990000                                                                   
+                                                                                
+
+PRJ PRJ_NAME   START_DAT END_DATE  ACTUAL_EN LEAD_BY_EMPCODE BUDGET_ALLOCATED   
+--- ---------- --------- --------- --------- --------------- ----------------   
+ACTUAL_BUDGET                                                                   
+-------------                                                                   
+P4  ZEUS       28-FEB-20 09-JUN-21 10-JAN-22             110          5500000   
+      5000000                                                                   
+                                                                                
+P2  APOLLO     01-JAN-19 10-JUL-21 30-DEC-21             108          3000000   
+      3600000                                                                   
+                                                                                
+P5  JUPITER    07-AUG-18 04-FEB-20 01-NOV-20             110          9000000   
+      9000000                                                                   
+                                                                                
+
+9 rows selected.
+
+SQL> SELECT SKILLNAME FROM EMP_SKILL ORDER BY SKILL_EXPERIENCE DESC;
+SELECT SKILLNAME FROM EMP_SKILL ORDER BY SKILL_EXPERIENCE DESC
+       *
+ERROR at line 1:
+ORA-00904: "SKILLNAME": invalid identifier 
+
+
+SQL> SELECT SKILLID FROM EMP_SKILL ORDER BY SKILL_EXPERIENCE DESC;
+
+SKI                                                                             
+---                                                                             
+S6                                                                              
+S6                                                                              
+S4                                                                              
+S11                                                                             
+S1                                                                              
+S7                                                                              
+S6                                                                              
+S10                                                                             
+S8                                                                              
+S2                                                                              
+S2                                                                              
+
+SKI                                                                             
+---                                                                             
+S3                                                                              
+S1                                                                              
+S9                                                                              
+
+14 rows selected.
+
+SQL> SELECT S.SKILLNAMES FROM EMP_SKILL E,SKILL S WHERE E.SKILLID = S.SKILLID ORDER BY SKILL_EXPERIENCE DESC;
+SELECT S.SKILLNAMES FROM EMP_SKILL E,SKILL S WHERE E.SKILLID = S.SKILLID ORDER BY SKILL_EXPERIENCE DESC
+       *
+ERROR at line 1:
+ORA-00904: "S"."SKILLNAMES": invalid identifier 
+
+
+SQL> SELECT S.SKILLNAME FROM EMP_SKILL E,SKILL S WHERE E.SKILLID = S.SKILLID ORDER BY SKILL_EXPERIENCE DESC;
+
+SKILLNAME                                                                       
+--------------------                                                            
+Oracle                                                                          
+Oracle                                                                          
+C++                                                                             
+QISKIT                                                                          
+Full stack                                                                      
+Oracle                                                                          
+Android                                                                         
+IOS                                                                             
+Python                                                                          
+AZURE                                                                           
+Python                                                                          
+
+SKILLNAME                                                                       
+--------------------                                                            
+Java                                                                            
+Full stack                                                                      
+DOT NET                                                                         
+
+14 rows selected.
+
+SQL> SELECT E.NAME, S.SKILLNAME FROM EMP E,EMP_SKILL E2,SKILL S WHERE E.SKILLID = S.SKILLID AND E.EMPCODE = E2.EMPNO ORDER BY EMPN0 ASC, SKILL_EXPERIENCE DESC;
+SELECT E.NAME, S.SKILLNAME FROM EMP E,EMP_SKILL E2,SKILL S WHERE E.SKILLID = S.SKILLID AND E.EMPCODE = E2.EMPNO ORDER BY EMPN0 ASC, SKILL_EXPERIENCE DESC
+                                                                                                                         *
+ERROR at line 1:
+ORA-00904: "EMPN0": invalid identifier 
+
+
+SQL> SELECT E.NAME, S.SKILLNAME FROM EMP E,EMP_SKILL E2,SKILL S WHERE E.SKILLID = S.SKILLID AND E.EMPCODE = E2.EMPNO ORDER BY EMPNO ASC, SKILL_EXPERIENCE DESC;
+SELECT E.NAME, S.SKILLNAME FROM EMP E,EMP_SKILL E2,SKILL S WHERE E.SKILLID = S.SKILLID AND E.EMPCODE = E2.EMPNO ORDER BY EMPNO ASC, SKILL_EXPERIENCE DESC
+                                                                 *
+ERROR at line 1:
+ORA-00904: "E"."SKILLID": invalid identifier 
+
+
+SQL> SELECT E.NAME, S.SKILLNAME FROM EMP E,EMP_SKILL E2,SKILL S WHERE E2.SKILLID = S.SKILLID AND E.EMPCODE = E2.EMPNO ORDER BY EMPNO ASC, SKILL_EXPERIENCE DESC;
+
+NAME       SKILLNAME                                                            
+---------- --------------------                                                 
+RAVI       Python                                                               
+RAVI       Java                                                                 
+RAVI       Full stack                                                           
+VIJAY      C++                                                                  
+MANISH     Android                                                              
+MANISH     IOS                                                                  
+RAJ        Oracle                                                               
+RAJ        Python                                                               
+RAJ        AZURE                                                                
+AJAY       Oracle                                                               
+AJAY       DOT NET                                                              
+
+NAME       SKILLNAME                                                            
+---------- --------------------                                                 
+BHASKAR    Oracle                                                               
+BHASKAR    Full stack                                                           
+ANIKA      QISKIT                                                               
+
+14 rows selected.
+
+SQL> SELECT E.NAME,F.DEP_NAME FROM EMP E, FAMILY_DEPENDENTS F
+  2  WHERE E.EMPCODE = F.EMPNO
+  3  ORDER BY E.NAME ASC, F.AGE DESC;
+
+NAME       DEP_NAME                                                             
+---------- --------------------                                                 
+RAVI       ANITHA                                                               
+RAVI       AARYA                                                                
+RAVI       AKANKSH                                                              
+VIJAY      ANIL                                                                 
+
+SQL> SELECT E.NAME, P.PRJ_DETAILS FROM EMP E, PRJ_DETAILS P
+  2  WHERE E.EMPCODE = P.LEAD_BY_EMPCODE
+  3  ORDER BY E.NAME ASC, P.PRJ_NAME;
+SELECT E.NAME, P.PRJ_DETAILS FROM EMP E, PRJ_DETAILS P
+               *
+ERROR at line 1:
+ORA-00904: "P"."PRJ_DETAILS": invalid identifier 
+
+
+SQL> SELECT E.NAME, P.PRJ_NAME FROM EMP E, PRJ_DETAILS P
+  2  WHERE E.EMPCODE = P.LEAD_BY_EMPCODE
+  3  ORDER BY E.NAME ASC, P.PRJ_NAME DESC;
+
+NAME       PRJ_NAME                                                             
+---------- ----------                                                           
+AJAY       APOLLO                                                               
+ANIKA      PUSH                                                                 
+BHASKAR    ZEUS                                                                 
+BHASKAR    XXX                                                                  
+BHASKAR    MARS                                                                 
+BHASKAR    JUPITER                                                              
+RAJ        UNICORN                                                              
+VIJAY      SPYDER2                                                              
+VIJAY      SPYDER                                                               
+
+9 rows selected.
+
+SQL> SELECT E.NAME FROM EMP E, PRJ_DETAILS P
+  2  WHERE P.LEAD_BY_EMPCODE = E.EMPCODE AND P.PRJ_NAME = 'SPYDER'
+  3  UNION
+  4  SELECT E.NAME FROM EMP E, PRJ_DETAILS P
+  5  WHERE P.LEAD_BY_EMPCODE = E.EMPCODE AND P.PRJ_NAME = 'APOLLO';
+
+NAME                                                                            
+----------                                                                      
+AJAY                                                                            
+VIJAY                                                                           
+
+SQL> SELECT E.NAME FROM EMP E ,EMP_SKILL E2, SKILL S WHERE E.EMPCODE = E2.EMPNO AND E2.SKILLID = S.SKILLID AND S.SKILLNAME = 'ORACLE'
+  2  INTERSECT
+  3  SELECT E.NAME FROM EMP E, EMP_SKILL E2, SKILL S WHERE E.EMPCODE = E2.EMPNO AND E2.SKILLID = S.SKILLID AND S.SKILLNAME = 'AZURE';
+
+no rows selected
+
+SQL> SELECT E.NAME, P.PRJ_NAME FROM EMP E, PRJ_DETAILS P
+  2  WHERE E.EMPCODE = P.LEAD_BY_EMPCODE
+  3  ;;;
+;;
+*
+ERROR at line 3:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT E.NAME FROM EMP E, PRJ_DETAILS P
+  2  WHERE P.LEAD_BY_EMPCODE = E.EMPCODE
+  3  MINUS
+  4  SELECT E.NAME FROM EMP E, PRJ_DETAILS P
+  5  WHERE P.LEAD_BY_EMPCODE = E.EMPCODE AND P.PRJ_NAME = 'JUPITOR';
+
+NAME                                                                            
+----------                                                                      
+AJAY                                                                            
+ANIKA                                                                           
+BHASKAR                                                                         
+RAJ                                                                             
+VIJAY                                                                           
+
+SQL> SELECT NAME FROM EMP WHERE REPORTS_TO IS NULL;
+
+NAME                                                                            
+----------                                                                      
+PRSAD                                                                           
+
+SQL> SELECT NAME,EMAIL WHERE NAME LIKE 'RA%';
+SELECT NAME,EMAIL WHERE NAME LIKE 'RA%'
+                  *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT NAME,EMAIL WHERE NAME LIKE ('RA%');
+SELECT NAME,EMAIL WHERE NAME LIKE ('RA%')
+                  *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT NAME,EMAIL FROM EMP WHERE NAME LIKE 'RA%';
+
+NAME       EMAIL                                                                
+---------- --------------------                                                 
+RAVI       ravi@digisol.com                                                     
+RAJ        raj@digisol.com                                                      
+RAKESH     prasa1@digisol.com                                                   
+RAKESH     prasa2@digisol.com                                                   
+RAJ        ra1@digisol.com                                                      
+
+SQL> SELECT PRJ_NAME FROM PRJ_DETAILS
+  2  WHERE START_DATE BETWEEN TO_DATE('01-01-2020','DD-MM-YYYY) AND TO_DATE('31-12-2020','DD-MM-YYYY');
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> SELECT PRJ_NAME FROM PRJ_DETAILS
+  2  WHERE START_DATE BETWEEN TO_DATE('01-01-2020','DD-MM-YYYY') AND TO_DATE('31-12-2020','DD-MM-YYYY');
+
+PRJ_NAME                                                                        
+----------                                                                      
+SPYDER                                                                          
+ZEUS                                                                            
+SPYDER2                                                                         
+
+SQL> SELECT S.SKILLNAME FROM EMP E, EMP_SKILL E2, SKILL S
+  2  WHERE E.EMPCODE = E2.EMPNO AND E2.SKILLID = S.SKILLID
+  3  AND E.EMPCODE = 101;
+
+SKILLNAME                                                                       
+--------------------                                                            
+Full stack                                                                      
+Python                                                                          
+Java                                                                            
+
+SQL> SELECT E.NAME FROM EMP E, EMP_SKILL E2, SKILL S
+  2  WHERE E.EMPCODE = E2.EMPNO AND E2.SKILLID = S.SKILLID
+  3  AND S.SKILLNAME IN (
+  4  SELECT S.SKILLNAME FROM EMP E, EMP_SKILL E2, SKILL S
+  5  WHERE E.EMPCODE = E2.EMPNO AND E2.SKILLID = S.SKILLID
+  6  AND E.EMPCODE = 101);
+
+NAME                                                                            
+----------                                                                      
+RAJ                                                                             
+RAVI                                                                            
+RAVI                                                                            
+RAVI                                                                            
+BHASKAR                                                                         
+
+SQL> SPOOL OFF

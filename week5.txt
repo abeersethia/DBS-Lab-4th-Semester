@@ -1,0 +1,190 @@
+SQL> SELECT NAME FROM EMP WHERE DESIGNATION IN (
+  2  SELECT DESIGNATION FROM EMP WHERE EMPCODE = 100);
+
+no rows selected
+
+SQL> SELECT * FROM EMP;
+
+   EMPCODE NAME       QUALIFI      PHONE EMAIL                                  
+---------- ---------- ------- ---------- --------------------                   
+DESIGNATION              SALARY REPORTS_TO                                      
+-------------------- ---------- ----------                                      
+       112 ANIKA      PHD     8962446551 anika@digisol.com                      
+CEO                      202000        107                                      
+                                                                                
+       101 RAVI       MTECH   8962446442 ravi@digisol.com                       
+PROJECT LEADER           101000        102                                      
+                                                                                
+       102 VIJAY      BTECH   8962446443 vijay@digisol.com                      
+PROJECT MANAGER          101000        110                                      
+                                                                                
+
+   EMPCODE NAME       QUALIFI      PHONE EMAIL                                  
+---------- ---------- ------- ---------- --------------------                   
+DESIGNATION              SALARY REPORTS_TO                                      
+-------------------- ---------- ----------                                      
+       108 AJAY       BTECH   8962446444 ajay@digisol.com                       
+TECHNICAL HEAD           101000        102                                      
+                                                                                
+       110 BHASKAR    MTECH   8962446445 bhaskar@digisol.com                    
+PROJECT DIRECTOR         101000        106                                      
+                                                                                
+       106 RAJ        MSC     8962446446 raj@digisol.com                        
+PROJECT LEADER           101000        110                                      
+                                                                                
+
+   EMPCODE NAME       QUALIFI      PHONE EMAIL                                  
+---------- ---------- ------- ---------- --------------------                   
+DESIGNATION              SALARY REPORTS_TO                                      
+-------------------- ---------- ----------                                      
+       105 MANISH     MCA     8962446447 manish@digisol.com                     
+DEVELOPER                101000        106                                      
+                                                                                
+       107 PRSAD      PHD     8962446448 prasad@digisol.com                     
+CEO                      101000                                                 
+                                                                                
+       103 RAKESH     MTECH   8962446449 prasa1@digisol.com                     
+PROJECT LEADER           101000        101                                      
+                                                                                
+
+   EMPCODE NAME       QUALIFI      PHONE EMAIL                                  
+---------- ---------- ------- ---------- --------------------                   
+DESIGNATION              SALARY REPORTS_TO                                      
+-------------------- ---------- ----------                                      
+       115 RAKESH     MTECH   8962446451 prasa2@digisol.com                     
+DEVELOPER                101000        101                                      
+                                                                                
+       109 PUSHKAL    MCA     8962446461 prasa3@digisol.com                     
+PROJECT LEADER           101000        101                                      
+                                                                                
+       120 ANIKA      MCA     8962446471 prasa4@digisol.com                     
+DEVELOPER                101000        101                                      
+                                                                                
+
+   EMPCODE NAME       QUALIFI      PHONE EMAIL                                  
+---------- ---------- ------- ---------- --------------------                   
+DESIGNATION              SALARY REPORTS_TO                                      
+-------------------- ---------- ----------                                      
+       111 RAJ        MCA     8962446481 ra1@digisol.com                        
+PROJECT LEADER           101000        101                                      
+                                                                                
+
+13 rows selected.
+
+SQL> SELECT NAME FROM EMP WHERE REPORTS_TO IN (
+  2  SELECT EMPCODE FROM EMP WHERE NAME = 'VIJAY');
+
+NAME                                                                            
+----------                                                                      
+RAVI                                                                            
+AJAY                                                                            
+
+SQL> SELECT NAME, DESGINATION, EMAIL FROM EMP WHERE EMPCODE IN
+  2  (SELECT EMPCODE FROM WORK_EXP WHERE EMPCODE IN
+  3  (SELECT EMPCODE FROM EMP WHERE NAME = 'VIJAY'));
+SELECT NAME, DESGINATION, EMAIL FROM EMP WHERE EMPCODE IN
+             *
+ERROR at line 1:
+ORA-00904: "DESGINATION": invalid identifier 
+
+
+SQL> SELECT NAME, DESIGNATION, EMAIL FROM EMP WHERE EMPCODE IN
+  2  (SELECT EMPCODE FROM WORK_EXP WHERE EMPCODE IN
+  3  (SELECT EMPCODE FROM EMP WHERE NAME = 'VIJAY'));
+
+NAME       DESIGNATION          EMAIL                                           
+---------- -------------------- --------------------                            
+VIJAY      PROJECT MANAGER      vijay@digisol.com                               
+
+SQL> SELECT NAME, DESGINATION, EMAIL FROM EMP WHERE EMPCODE IN
+  2  (SELECT DISTINCT EMPCODE FROM WORK_EXP WHERE PRJID IN
+  3  (SELECT PRJID FROM WORK_EXP WHERE EMPCODE IN
+  4  (SELECT EMPCODE FROM EMP WHERE NAME = 'VIJAY')));
+SELECT NAME, DESGINATION, EMAIL FROM EMP WHERE EMPCODE IN
+             *
+ERROR at line 1:
+ORA-00904: "DESGINATION": invalid identifier 
+
+
+SQL> SELECT NAME, DESIGNATION, EMAIL FROM EMP WHERE EMPCODE IN
+  2  (SELECT DISTINCT EMPCODE FROM WORK_EXP WHERE PRJID IN
+  3  (SELECT PRJID FROM WORK_EXP WHERE EMPCODE IN
+  4  (SELECT EMPCODE FROM EMP WHERE NAME = 'VIJAY')));
+
+NAME       DESIGNATION          EMAIL                                           
+---------- -------------------- --------------------                            
+RAVI       PROJECT LEADER       ravi@digisol.com                                
+VIJAY      PROJECT MANAGER      vijay@digisol.com                               
+MANISH     DEVELOPER            manish@digisol.com                              
+AJAY       TECHNICAL HEAD       ajay@digisol.com                                
+
+SQL> SELECT NAME, DESIGNATION, EMAIL FROM EMP WHERE EMPCODE IN
+  2  (SELECT DISTINCT EMPCODE FROM WORK_EXP WHERE PRJID IN
+  3  (SELECT PRJID FROM WORK_EXP WHERE EMPCODE IN
+  4  (SELECT EMPCODE FROM EMP WHERE NAME = 'VIJAY'))) AND NAME <> 'VIJAY';
+
+NAME       DESIGNATION          EMAIL                                           
+---------- -------------------- --------------------                            
+RAVI       PROJECT LEADER       ravi@digisol.com                                
+MANISH     DEVELOPER            manish@digisol.com                              
+AJAY       TECHNICAL HEAD       ajay@digisol.com                                
+
+SQL> SELECT NAME FROM EMP WHERE EMPCODE IN (
+  2  SELECT DISTINCT EMPNO FROM FAMILY_DEPENDENTS WHERE RELATIONSHIP = 'DAUGHTER');
+
+NAME                                                                            
+----------                                                                      
+RAVI                                                                            
+
+SQL> SELECT * FROM FAMILY_DEPENDENTS;
+
+     EMPNO DEP_NAME             RELATIONSHIP            AGE                     
+---------- -------------------- ---------------- ----------                     
+       101 AARYA                DAUGHTER                 17                     
+       101 AKANKSH              SON                      11                     
+       101 ANITHA               SPOUSE                   43                     
+       102 ANIL                 SON                      12                     
+
+SQL> SELECT NAME FROM EMP WHERE EMPCODE NOT IN (
+  2  SELECT EMPCODE FROM WORK_EXP WHERE PRJID IN (
+  3  SELECT PRJID FROM PRJ_DETAILS WHERE PRJ_NAME = 'SPYDER'));
+
+NAME                                                                            
+----------                                                                      
+PRSAD                                                                           
+AJAY                                                                            
+PUSHKAL                                                                         
+BHASKAR                                                                         
+MANISH                                                                          
+RAKESH                                                                          
+RAKESH                                                                          
+ANIKA                                                                           
+ANIKA                                                                           
+RAJ                                                                             
+RAJ                                                                             
+
+11 rows selected.
+
+SQL> SELECT NAME FROM EMP WHERE EMPCODE
+  2  (SELECT EMPNO FROM EMP_SKILL WHERE SKILLID IN
+  3  (SELECT SKILLID FROM EMP_SKILL WHERE EMPNO IN
+  4  (SELECT EMPCODE FROM WORK_EXP WHERE PRJID = 'P1')));
+(SELECT EMPNO FROM EMP_SKILL WHERE SKILLID IN
+ *
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> SELECT NAME FROM EMP WHERE EMPCODE IN
+  2  (SELECT EMPNO FROM EMP_SKILL WHERE SKILLID IN
+  3  (SELECT SKILLID FROM EMP_SKILL WHERE EMPNO IN
+  4  (SELECT EMPCODE FROM WORK_EXP WHERE PRJID = 'P1')));
+
+NAME                                                                            
+----------                                                                      
+BHASKAR                                                                         
+RAVI                                                                            
+RAJ                                                                             
+VIJAY                                                                           
+
+SQL> spool off

@@ -1,0 +1,25 @@
+
+SQL> SELECT * FROM CLIENT ;
+
+CLI NAME       PHONE          EMAIL
+--- ---------- -------------- --------------------
+C11 DEF        +48-8748938910 aaB@abc.com
+C2  LTS        +91-7838939700 bbb@its.com
+C3  RK         +44-6783893400 ccc@rk.com
+C4  MMA        +31-7783909300 ddd@mma.com
+C5  AKS        +81-6682290300 eee@aks.com
+C6  GKS        +48-7562898200 fff@gks.com
+C7  BAB        +91-6483983900 ggg@bb.com
+C8  ABT        +91-6755466700 agc@ag.com
+C9  XYZ        +91-6755466701 xyz@ab.com
+
+9 rows selected.
+
+SQL> SELECT NAME, PHONE, EMAIL FROM EMP
+  2  WHERE DESIGNATION = 'DEVELOPER';
+
+NAME            PHONE EMAIL
+---------- ---------- --------------------
+MANISH     8962446447 manish@digisol.com
+RAKESH     8962446451 prasa2@digisol.com
+ANIKA      8962446471 prasa4@digisol.com

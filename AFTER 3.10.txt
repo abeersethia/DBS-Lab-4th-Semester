@@ -1,0 +1,89 @@
+3.10
+SQL> UPDATE EMP
+  2  SET EMAIL = 'rajesh@digital.com'
+  3  WHERE EMPCODE = 100;
+
+0 rows updated.
+
+3.11
+SQL> UPDATE PRJ_DETAILS
+  2  SET PRJID = 'P9' WHERE PRJID = 'P8';
+
+1 row updated.
+
+SQL> UPDATE WORK_EXP
+  2  SET PRJID = 'P9' WHERE EMPCODE = 111;
+
+1 row updated.
+
+SQL>
+
+3.12
+SQL> COMMIT
+SQL> DELETE FROM CLIENT
+  2  WHERE CLIENTID = 'C1';
+
+1 row deleted.
+
+SQL>
+3.13
+SQL> COMMIT
+  2  ;
+
+Commit complete.
+
+SQL> DELETE FROM FAMILY_DEPENDENTS
+  2  WHERE EMPNO = 100;
+
+0 rows deleted.
+
+3.14
+SQL> UPDATE EMP
+  2  SET SALARY = 1.01*SALARY;
+
+13 rows updated.
+
+3.15
+SQL> SELECT REPORTS_TO FROM EMP WHERE EMPCODE = 108;
+
+REPORTS_TO
+----------
+       102
+
+SQL> UPDATE EMP
+  2  SET EMPCODE = 106 WHERE EMPCODE = (SELECT REPORTS_TO FROM EMP WHERE EMPCODE = 10
+8);
+UPDATE EMP
+*
+ERROR at line 1:
+ORA-00001: unique constraint (DSE033.PK_EMPNO) violated
+
+3.16
+SQL> UPDATE EMP
+  2  SET EMPCODE = 117 WHERE EMPCODE = (
+  3  SELECT REPORTS_TO FROM EMP
+  4  WHERE EMPCODE = 108);
+UPDATE EMP
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (DSE033.FK_EMPNO) violated - child record found
+
+
+SQL>
+
+SQL> UPDATE EMP
+  2  SET EMPCODE = 117 WHERE EMPCODE = (
+  3  SELECT REPORTS_TO FROM EMP
+  4  WHERE EMPCODE = 108);
+UPDATE EMP
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (DSE033.FK_EMPNO) violated - child record found
+
+
+SQL>
+
+
+
+
+
